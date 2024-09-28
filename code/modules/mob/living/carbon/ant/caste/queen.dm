@@ -1,31 +1,31 @@
-/mob/living/carbon/alien/humanoid/ant/scout
-	name = "scout Ant"
-	caste = "s"
+/mob/living/carbon/alien/humanoid/ant/queen
+	name = "queen Ant"
+	caste = "q"
 	maxHealth = 150
 	health = 150
-	icon_state = "ants_s"
-	alien_movement_delay = -0.5 //hunters are faster than normal xenomorphs, and people
+	icon_state = "antq_s"
+	alien_movement_delay = -1.5 //hunters are faster than normal xenomorphs, and people
 	var/leap_on_click = FALSE
 	/// Are we on leap cooldown?
 	var/on_leap_cooldown = FALSE
 
-/mob/living/carbon/alien/humanoid/ant/scout/Initialize(mapload)
+/mob/living/carbon/alien/humanoid/ant/queen/Initialize(mapload)
 	. = ..()
-	name = "scout ([rand(1, 1000)])"
+	name = "queen ([rand(1, 1000)])"
 	real_name = name
+	AddSpell(new /datum/spell/ant_spell/plant_weeds/eggs)
 
-/mob/living/carbon/alien/humanoid/ant/scout/get_caste_organs()
+/mob/living/carbon/alien/humanoid/ant/queen/get_caste_organs()
 	. = ..()
-	. += /obj/item/organ/internal/alien/plasmavessel/hunter
+	. += list()
 
-/mob/living/carbon/alien/humanoid/ant/scout/handle_environment()
+/mob/living/carbon/alien/humanoid/ant/queen/handle_environment()
 	if(m_intent == MOVE_INTENT_RUN || IS_HORIZONTAL(src))
 		..()
 	else
 		add_plasma(-heal_rate)
 
-
-/mob/living/carbon/alien/humanoid/ant/scout/proc/toggle_leap(message = TRUE)
+/mob/living/carbon/alien/humanoid/ant/queen/proc/toggle_leap(message = TRUE)
 	leap_on_click = !leap_on_click
 	leap_icon.icon_state = "leap_[leap_on_click ? "on":"off"]"
 	update_icons()
@@ -41,22 +41,26 @@
 
 #define MAX_ALIEN_LEAP_DIST 7
 
-/mob/living/carbon/alien/humanoid/ant/scout/proc/leap_at(atom/A)
+/mob/living/carbon/alien/humanoid/ant/queen/proc/leap_at(atom/A)
 	if(leaping || on_leap_cooldown)
 		return
 
 	if(IS_HORIZONTAL(src))
 		return
 
+	leaping = TRUE
+	on_leap_cooldown = TRUE
 	update_icons()
+	Immobilize(15 SECONDS, TRUE)
+	addtimer(VARSET_CALLBACK(src, on_leap_cooldown, FALSE), 3 SECONDS)
+	throw_at(A, MAX_ALIEN_LEAP_DIST, 1.5, spin = 0, diagonals_first = 1, callback = CALLBACK(src, PROC_REF(leap_end)))
 
-
-/mob/living/carbon/alien/humanoid/ant/scout/proc/leap_end()
+/mob/living/carbon/alien/humanoid/ant/queen/proc/leap_end()
 	leaping = FALSE
 	SetImmobilized(0, TRUE)
 	update_icons()
 
-/mob/living/carbon/alien/humanoid/ant/scout/throw_impact(atom/A)
+/mob/living/carbon/alien/humanoid/ant/queen/throw_impact(atom/A)
 	if(!leaping)
 		return ..()
 
@@ -81,7 +85,7 @@
 			Weaken(2 SECONDS, TRUE)
 			..()
 
-	//	toggle_leap(FALSE)
+		toggle_leap(FALSE)
 	else if(A.density && !A.CanPass(src))
 		visible_message("<span class ='danger'>[src] smashes into [A]!</span>", "<span class ='alertalien'>[src] smashes into [A]!</span>")
 		Weaken(2 SECONDS, TRUE)
@@ -91,7 +95,7 @@
 		leaping = FALSE
 		update_icons()
 
-/mob/living/carbon/alien/humanoid/ant/scout/update_icons()
+/mob/living/carbon/alien/humanoid/ant/queen/update_icons()
 	..()
 	if(leap_on_click && !leaping)
 		icon_state = "ant[caste]_pounce"
@@ -104,7 +108,7 @@
 		pixel_x = -32
 		pixel_y = -32
 
-/mob/living/carbon/alien/humanoid/ant/scout/float(on)
+/mob/living/carbon/alien/humanoid/ant/queen/float(on)
 	if(leaping)
 		return
 	..()

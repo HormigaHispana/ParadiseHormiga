@@ -1,4 +1,4 @@
-/mob/living/carbon/ant
+/mob/living/carbon/alien/humanoid/ant
 	name = "Ant"
 	voice_name = "Ant"
 	speak_emote = list("hisses")
@@ -6,23 +6,23 @@
 	icon = 'icons/hormiga/ant.dmi'
 	gender = NEUTER
 
-	var/nightvision = TRUE
+	nightvision = TRUE
 	see_in_dark = 4
 
-	var/obj/item/card/id/wear_id = null // Fix for station bounced radios -- Skie
-	var/has_fine_manipulation = FALSE
-	var/move_delay_add = 0 // movement delay to add
+	obj/item/card/id/wear_id = null // Fix for station bounced radios -- Skie
+	has_fine_manipulation = FALSE
+	move_delay_add = 0 // movement delay to add
 
 	status_flags = CANPARALYSE|CANPUSH
-	var/heal_rate = 5
-	var/loudspeaker = FALSE
-	var/heat_protection = 0.5
-	var/leaping = FALSE
+	heal_rate = 5
+	loudspeaker = FALSE
+	heat_protection = 0.5
+	leaping = FALSE
 	ventcrawler = VENTCRAWLER_ALWAYS
-	var/death_message = "lets out a waning guttural screech, green blood bubbling from its maw..."
-	var/death_sound = 'sound/voice/hiss6.ogg'
+	death_message = "lets out a waning guttural screech, green blood bubbling from its maw..."
+	death_sound = 'sound/voice/hiss6.ogg'
 
-/mob/living/carbon/ant/Initialize(mapload)
+/mob/living/carbon/alien/humanoid/ant/Initialize(mapload)
 	. = ..()
 	create_reagents(1000)
 
@@ -32,7 +32,7 @@
 
 /// returns the list of type paths of the organs that we need to insert into
 /// this particular xeno upon its creation
-/mob/living/carbon/ant/proc/get_caste_organs()
+/mob/living/carbon/alien/humanoid/ant/get_caste_organs()
 	RETURN_TYPE(/list/obj/item/organ/internal)
 	return list(
 		/obj/item/organ/internal/brain/xeno,
@@ -40,12 +40,12 @@
 		/obj/item/organ/internal/ears
 	)
 
-/mob/living/carbon/ant/get_default_language()
+/mob/living/carbon/alien/humanoid/ant/get_default_language()
 	if(default_language)
 		return default_language
 	return GLOB.all_languages["Xenomorph"]
 
-/mob/living/carbon/ant/say_quote(message, datum/language/speaking = null)
+/mob/living/carbon/alien/humanoid/ant/say_quote(message, datum/language/speaking = null)
 	var/speech_verb = "hisses"
 	var/ending = copytext(message, length(message))
 
@@ -59,20 +59,20 @@
 	return speech_verb
 
 
-/mob/living/carbon/ant/adjustToxLoss(amount)
+/mob/living/carbon/alien/humanoid/ant/adjustToxLoss(amount)
 	return STATUS_UPDATE_NONE
 
-/mob/living/carbon/ant/adjustFireLoss(amount) // Weak to Fire
+/mob/living/carbon/alien/humanoid/ant/adjustFireLoss(amount) // Weak to Fire
 	if(amount > 0)
 		return ..(amount * 1.5)
 	else
 		return ..(amount)
 
 
-/mob/living/carbon/ant/check_eye_prot()
+/mob/living/carbon/alien/humanoid/ant/check_eye_prot()
 	return 2
 
-/mob/living/carbon/ant/handle_environment(datum/gas_mixture/readonly_environment)
+/mob/living/carbon/alien/humanoid/ant/handle_environment(datum/gas_mixture/readonly_environment)
 	if(!readonly_environment)
 		return
 
@@ -105,32 +105,32 @@
 	else
 		clear_alert("alien_fire")
 
-/mob/living/carbon/ant/IsAdvancedToolUser()
+/mob/living/carbon/alien/humanoid/ant/IsAdvancedToolUser()
 	return has_fine_manipulation
 
-/mob/living/carbon/ant/get_status_tab_items()
+/mob/living/carbon/alien/humanoid/ant/get_status_tab_items()
 	var/list/status_tab_data = ..()
 	. = status_tab_data
 	status_tab_data[++status_tab_data.len] = list("Intent:", "[a_intent]")
 	status_tab_data[++status_tab_data.len] = list("Move Mode:", "[m_intent]")
 
-/mob/living/carbon/ant/SetStunned(amount, updating = TRUE, force = 0)
+/mob/living/carbon/alien/humanoid/ant/SetStunned(amount, updating = TRUE, force = 0)
 	..()
 	if(!(status_flags & CANSTUN) && amount)
 		// add some movement delay
 		move_delay_add = min(move_delay_add + round(amount / 2), 10) // a maximum delay of 10
 
-/mob/living/carbon/ant/movement_delay()
+/mob/living/carbon/alien/humanoid/ant/movement_delay()
 	. = ..()
 	. += move_delay_add + GLOB.configuration.movement.alien_delay //move_delay_add is used to slow aliens with stuns
 
-/mob/living/carbon/ant/getDNA()
+/mob/living/carbon/alien/humanoid/ant/getDNA()
 	return null
 
-/mob/living/carbon/ant/setDNA()
+/mob/living/carbon/alien/humanoid/ant/setDNA()
 	return
 
-/mob/living/carbon/ant/assess_threat(mob/living/simple_animal/bot/secbot/judgebot, lasercolor)
+/mob/living/carbon/alien/humanoid/ant/assess_threat(mob/living/simple_animal/bot/secbot/judgebot, lasercolor)
 	if(judgebot.emagged)
 		return 10 //Everyone is a criminal!
 	var/threatcount = 0
@@ -164,19 +164,17 @@
 
 	return threatcount
 
-/mob/living/carbon/ant/proc/deathrattle()
+/mob/living/carbon/alien/humanoid/ant/deathrattle()
 	var/alien_message = deathrattle_message()
 	for(var/mob/living/carbon/alien/M in GLOB.player_list)
 		to_chat(M, alien_message)
 
-/mob/living/carbon/ant/proc/deathrattle_message()
-	return "<i><span class='alien'>The hivemind echoes: [name] has been slain!</span></i>"
 
 /*----------------------------------------
 Proc: AddInfectionImages()
 Des: Gives the client of the alien an image on each infected mob.
 ----------------------------------------*/
-/mob/living/carbon/ant/proc/AddInfectionImages()
+/mob/living/carbon/alien/humanoid/ant/AddInfectionImages()
 	if(!client)
 		return
 	for(var/mob/living/C in GLOB.mob_list)
@@ -191,14 +189,14 @@ Des: Gives the client of the alien an image on each infected mob.
 Proc: RemoveInfectionImages()
 Des: Removes all infected images from the alien.
 ----------------------------------------*/
-/mob/living/carbon/ant/proc/RemoveInfectionImages()
+/mob/living/carbon/alien/humanoid/ant/RemoveInfectionImages()
 	if(!client)
 		return
 	for(var/image/I in client.images)
 		if(dd_hasprefix_case(I.icon_state, "infected"))
 			qdel(I)
 
-/mob/living/carbon/ant/canBeHandcuffed()
+/mob/living/carbon/alien/humanoid/ant/canBeHandcuffed()
 	return TRUE
 
 /* Although this is on the carbon level, we only want this proc'ing for aliens that do have this hud. Only humanoid aliens do at the moment, so we have a check
@@ -214,19 +212,19 @@ and carry the owner just to make sure*/
 	hud_used.alien_plasma_display.maptext_x = -3
 
 */
-/mob/living/carbon/ant/larva/update_plasma_display()
+/mob/living/carbon/alien/humanoid/ant/larva/update_plasma_display()
 	return
 
-/mob/living/carbon/ant/can_use_vents()
+/mob/living/carbon/alien/humanoid/ant/can_use_vents()
 	return
 
-/mob/living/carbon/ant/getTrail()
+/mob/living/carbon/alien/humanoid/ant/getTrail()
 	if(getBruteLoss() < 200)
 		return pick("xltrails_1", "xltrails_2")
 	else
 		return pick("xttrails_1", "xttrails_2")
 
-/mob/living/carbon/ant/update_sight()
+/mob/living/carbon/alien/humanoid/ant/update_sight()
 	if(!client)
 		return
 	if(stat == DEAD)
@@ -250,11 +248,11 @@ and carry the owner just to make sure*/
 	SEND_SIGNAL(src, COMSIG_MOB_UPDATE_SIGHT)
 	sync_lighting_plane_alpha()
 
-/mob/living/carbon/ant/on_lying_down(new_lying_angle)
+/mob/living/carbon/alien/humanoid/ant/on_lying_down(new_lying_angle)
 	. = ..()
 	ADD_TRAIT(src, TRAIT_IMMOBILIZED, LYING_DOWN_TRAIT) //Xenos can't crawl
 
-/mob/living/carbon/ant/update_stat(reason)
+/mob/living/carbon/alien/humanoid/ant/update_stat(reason)
 	if(health <= HEALTH_THRESHOLD_CRIT && stat == CONSCIOUS)
 		KnockOut()
 	return ..()

@@ -7,7 +7,7 @@
 #define X_FIRE_LAYER			6
 /////////////////////////////////
 
-/mob/living/carbon/ant/humanoid/update_icons()
+/mob/living/carbon/alien/humanoid/ant/update_icons()
 	overlays.Cut()
 	for(var/image/I in overlays_standing)
 		overlays += I
@@ -39,7 +39,7 @@
 	pixel_x = get_standard_pixel_x_offset()
 	pixel_y = get_standard_pixel_y_offset()
 
-/mob/living/carbon/ant/humanoid/regenerate_icons()
+/mob/living/carbon/alien/humanoid/ant/regenerate_icons()
 	..()
 	if(notransform)
 		return
@@ -53,11 +53,11 @@
 	update_fire()
 	update_transform()
 
-/mob/living/carbon/ant/humanoid/update_transform() //The old method of updating lying/standing was update_icons(). Aliens still expect that.
+/mob/living/carbon/alien/humanoid/ant/update_transform() //The old method of updating lying/standing was update_icons(). Aliens still expect that.
 	..()
 	update_icons()
 
-/mob/living/carbon/ant/humanoid/update_fire()
+/mob/living/carbon/alien/humanoid/ant/update_fire()
 	overlays -= overlays_standing[X_FIRE_LAYER]
 	if(on_fire)
 		overlays_standing[X_FIRE_LAYER] = image("icon"='icons/mob/OnFire.dmi', "icon_state"="Generic_mob_burning", "layer"= -X_FIRE_LAYER)
@@ -66,7 +66,7 @@
 	else
 		overlays_standing[X_FIRE_LAYER] = null
 
-/mob/living/carbon/ant/humanoid/update_inv_wear_suit()
+/mob/living/carbon/alien/humanoid/ant/update_inv_wear_suit()
 	if(client && hud_used)
 		var/atom/movable/screen/inventory/inv = hud_used.inv_slots[SLOT_HUD_OUTER_SUIT]
 		inv.update_icon()
@@ -97,7 +97,7 @@
 	update_icons()
 
 
-/mob/living/carbon/ant/humanoid/update_inv_head()
+/mob/living/carbon/alien/humanoid/ant/update_inv_head()
 	if(head)
 		var/t_state = head.item_state
 		if(!t_state)	t_state = head.icon_state
@@ -110,7 +110,7 @@
 		overlays_standing[X_HEAD_LAYER]	= null
 	update_icons()
 
-/mob/living/carbon/ant/humanoid/update_inv_r_hand()
+/mob/living/carbon/alien/humanoid/ant/update_inv_r_hand()
 	..()
 	if(r_hand)
 		var/t_state = r_hand.item_state
@@ -121,7 +121,7 @@
 		overlays_standing[X_R_HAND_LAYER]	= null
 	update_icons()
 
-/mob/living/carbon/ant/humanoid/update_inv_l_hand()
+/mob/living/carbon/alien/humanoid/ant/update_inv_l_hand()
 	..()
 	if(l_hand)
 		var/t_state = l_hand.item_state
