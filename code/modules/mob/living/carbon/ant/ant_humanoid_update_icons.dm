@@ -15,22 +15,22 @@
 	if(stat == DEAD)
 		//If we mostly took damage from fire
 		if(getFireLoss() > 125)
-			icon_state = "alien[caste]_husked"
+			icon_state = "ant[caste]_husked"
 			pixel_y = 0
 		else
-			icon_state = "alien[caste]_dead"
+			icon_state = "ant[caste]_dead"
 			pixel_y = 0
 
 	else if(stat == UNCONSCIOUS || IsWeakened())
-		icon_state = "alien[caste]_unconscious"
+		icon_state = "ant[caste]_unconscious"
 		pixel_y = 0
 
 	else if(IS_HORIZONTAL(src))
-		icon_state = "alien[caste]_sleep"
+		icon_state = "ant[caste]_sleep"
 	else if(m_intent == MOVE_INTENT_RUN)
-		icon_state = "alien[caste]_running"
+		icon_state = "ant[caste]_running"
 	else
-		icon_state = "alien[caste]_s"
+		icon_state = "ant[caste]_s"
 
 	if(alt_icon != initial(alt_icon))
 		var/old_icon = icon
