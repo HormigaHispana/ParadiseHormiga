@@ -13,11 +13,10 @@
 	. = ..()
 	name = "queen ([rand(1, 1000)])"
 	real_name = name
-	AddSpell(new /datum/spell/ant_spell/plant_weeds/eggs)
 
 /mob/living/carbon/alien/humanoid/ant/queen/get_caste_organs()
 	. = ..()
-	. += list()
+	. += list(/obj/item/organ/internal/alien/plasmavessel/ant, /obj/item/organ/internal/alien/eggsac/ant)
 
 /mob/living/carbon/alien/humanoid/ant/queen/handle_environment()
 	if(m_intent == MOVE_INTENT_RUN || IS_HORIZONTAL(src))

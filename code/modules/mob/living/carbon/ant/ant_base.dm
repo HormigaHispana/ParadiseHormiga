@@ -202,16 +202,16 @@ Des: Removes all infected images from the alien.
 /* Although this is on the carbon level, we only want this proc'ing for aliens that do have this hud. Only humanoid aliens do at the moment, so we have a check
 and carry the owner just to make sure*/
 
-/* TEMPORARY
-/mob/living/carbon/proc/update_plasma_display(mob/owner)
+/*
+/mob/living/carbon/proc/ant_update_plasma_display(mob/owner)
 	for(var/datum/action/spell_action/action in actions)
 		action.UpdateButtons()
 	if(!hud_used || !isalien(owner)) //clientless aliens or non aliens
 		return
 	hud_used.alien_plasma_display.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:6px'> <font face='Small Fonts' color='magenta'>[get_plasma()]</font></div>"
 	hud_used.alien_plasma_display.maptext_x = -3
-
 */
+
 /mob/living/carbon/alien/humanoid/ant/larva/update_plasma_display()
 	return
 
